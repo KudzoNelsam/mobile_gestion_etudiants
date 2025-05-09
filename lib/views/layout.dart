@@ -56,7 +56,7 @@ class _LayoutState extends State<Layout> {
               } else if (snapshot.hasError) {
                 return Center(child: Text('Erreur: ${snapshot.error}'));
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('Aucun compte trouvé'));
+                return const Center(child: Text('Aucune inscription trouvée'));
               } else {
                 final inscriptions = snapshot.data!;
                 return ListView.builder(
