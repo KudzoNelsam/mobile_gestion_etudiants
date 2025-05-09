@@ -27,7 +27,9 @@ class ApiService<T> {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
-      return data.map((item) => fromJson(item)).toList();
+      final content = data.map((item) => fromJson(item)).toList();
+      print("Contenu des inscriptions : $content");
+      return content;
     } else {
       throw Exception(
         'Erreur ${response.statusCode} : ${response.reasonPhrase}',
@@ -86,6 +88,24 @@ class ApiService<T> {
     final response = await _client.delete(Uri.parse('$baseUrl/$endpoint/$id'));
 
     if (response.statusCode != 204) {
+      throw Exception(
+        'Erreur ${response.statusCode} : ${response.reasonPhrase}',
+      );
+    }
+  }
+
+  Future<List<T>> findByQuery(Map<String, String> query) async {
+    final uri = Uri.parse('$baseUrl/$endpoint').replace(queryParameters: query);
+
+    final response = await _client.get(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return data.map((item) => fromJson(item)).toList();
+    } else {
       throw Exception(
         'Erreur ${response.statusCode} : ${response.reasonPhrase}',
       );

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gestion_etudiants/models/inscription.dart';
-import 'package:gestion_etudiants/services/api_service.dart';
+import 'package:gestion_etudiants/services/inscription_service.dart';
 import 'package:gestion_etudiants/views/widget/inscription_widget.dart';
 
 class Layout extends StatefulWidget {
   const Layout({super.key, required this.apiService});
-  final ApiService apiService;
+  final InscriptionService apiService;
 
   @override
   State<Layout> createState() => _LayoutState();
@@ -19,8 +19,8 @@ class _LayoutState extends State<Layout> {
   late Future<List<Inscription>> _inscriptionFuture;
   void _refreshInscription() {
     setState(() {
-      _inscriptionFuture =
-          widget.apiService.findAll() as Future<List<Inscription>>;
+      _inscriptionFuture = widget.apiService.findAllInscriptions();
+      print(_inscriptionFuture);
     });
   }
 
@@ -50,11 +50,22 @@ class _LayoutState extends State<Layout> {
           ),
           FutureBuilder<List<Inscription>>(
             future: _inscriptionFuture,
+
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
+                print('Chargement des inscriptions...');
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                return Center(child: Text('Erreur: ${snapshot.error}'));
+                print('Erreur: ${snapshot.error}');
+                return Center(
+                  child: Text(
+                    'Erreur lors de la récupération des données !',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                );
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                 return const Center(child: Text('Aucune inscription trouvée'));
               } else {
