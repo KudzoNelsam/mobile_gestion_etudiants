@@ -4,7 +4,7 @@
             "id": 1,
             "nom": "Diop",
             "prenom": "Fatou",
-            "classe": "L1 MAE",
+            "classe": "L1-MAIE",
             "matricule": "MAE12345",
             "email": "fatou.diop@example.com"
         },
@@ -12,7 +12,7 @@
             "id": 2,
             "nom": "Sow",
             "prenom": "Aliou",
-            "classe": "L2 GEST",
+            "classe": "L2-GEST",
             "matricule": "GEST23456",
             "email": "aliou.sow@example.com"
         }

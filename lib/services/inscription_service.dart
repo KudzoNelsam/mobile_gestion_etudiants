@@ -89,7 +89,7 @@ class InscriptionService {
     );
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body)['inscriptions'];
+      final List<dynamic> data = json.decode(response.body);
       return data.map((item) => Inscription.fromJson(item)).toList();
     } else {
       throw Exception("Erreur de requête : ${response.statusCode}");

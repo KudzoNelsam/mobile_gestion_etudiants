@@ -11,25 +11,46 @@ class Layout extends StatefulWidget {
   State<Layout> createState() => _LayoutState();
 }
 
-@override
 class _LayoutState extends State<Layout> {
   final _formKey = GlobalKey<FormState>();
   final _numeroController = TextEditingController();
 
   late Future<List<Inscription>> _inscriptionFuture;
-  void _refreshInscription() {
+
+  // Recherche des inscriptions par classe
+  void _searchInscriptions(String query) {
     setState(() {
-      _inscriptionFuture = widget.apiService.findAllInscriptions();
-      print(_inscriptionFuture);
+      if (query.isNotEmpty) {
+        _inscriptionFuture = widget.apiService.searchInscriptionsByClasse(
+          query,
+        );
+      } else {
+        _inscriptionFuture = widget.apiService.findAllInscriptions();
+      }
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _refreshInscription();
+    _inscriptionFuture = widget.apiService.findAllInscriptions();
+
+    // Ajout d'un écouteur sur le controller pour effectuer la recherche en temps réel
+    _numeroController.addListener(() {
+      final query = _numeroController.text;
+      print("Recherche en cours : $query");
+      _searchInscriptions(query);
+    });
   }
 
+  @override
+  void dispose() {
+    _numeroController
+        .dispose(); // Libération des ressources lors de la destruction
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Gestion des étudiants')),
@@ -50,13 +71,10 @@ class _LayoutState extends State<Layout> {
           ),
           FutureBuilder<List<Inscription>>(
             future: _inscriptionFuture,
-
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                print('Chargement des inscriptions...');
                 return const Center(child: CircularProgressIndicator());
               } else if (snapshot.hasError) {
-                print('Erreur: ${snapshot.error}');
                 return Center(
                   child: Text(
                     'Erreur lors de la récupération des données !',
