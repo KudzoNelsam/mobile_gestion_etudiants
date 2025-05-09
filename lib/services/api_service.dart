@@ -4,14 +4,14 @@ import 'package:http/http.dart' as http;
 typedef FromJson<T> = T Function(Map<String, dynamic> json);
 typedef ToJson<T> = Map<String, dynamic> Function(T item);
 
-class CrudService<T> {
+class ApiService<T> {
   final String baseUrl;
   final String endpoint;
   final http.Client _client;
   final FromJson<T> fromJson;
   final ToJson<T> toJson;
 
-  CrudService({
+  ApiService({
     required this.endpoint,
     required this.fromJson,
     required this.toJson,

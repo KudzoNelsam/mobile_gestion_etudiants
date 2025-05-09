@@ -1,16 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:gestion_etudiants/models/inscription.dart';
+import 'package:gestion_etudiants/services/api_service.dart';
+import 'package:gestion_etudiants/views/layout.dart';
 
 void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(body: Center(child: Text('Hello World!'))),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        // Define your routes here
+        '/':
+            (context) => Layout(
+              apiService: ApiService<Inscription>(
+                endpoint: 'inscriptions',
+                fromJson: (json) => Inscription.fromJson(json),
+                toJson: (inscription) => inscription.toJson(),
+                baseUrl: "http://192.168.1.17:3000",
+              ),
+            ),
+      },
     );
   }
 }
