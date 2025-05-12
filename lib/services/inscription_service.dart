@@ -17,8 +17,10 @@ class InscriptionService {
       headers: {'Content-Type': 'application/json'},
     );
     if (response.statusCode == 200) {
-      print("contenu des inscriptions : ${response.body}");
       final List<dynamic> data = json.decode(response.body);
+      print(
+        "contenu des inscriptions : ${data.map((item) => Inscription.fromJson(item)).toList()}",
+      );
 
       return data.map((item) => Inscription.fromJson(item)).toList();
     } else {
@@ -84,7 +86,7 @@ class InscriptionService {
   // ✅ Rechercher des inscriptions par classe (query)
   Future<List<Inscription>> searchInscriptionsByClasse(String classe) async {
     final response = await _client.get(
-      Uri.parse("$baseUrl/inscriptions?classe=$classe"),
+      Uri.parse("$baseUrl/inscriptions?classe_like=$classe"),
       headers: {'Content-Type': 'application/json'},
     );
 

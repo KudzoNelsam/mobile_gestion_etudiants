@@ -21,9 +21,15 @@ class _LayoutState extends State<Layout> {
   void _searchInscriptions(String query) {
     setState(() {
       if (query.isNotEmpty) {
-        _inscriptionFuture = widget.apiService.searchInscriptionsByClasse(
-          query,
-        );
+        // _inscriptionFuture = widget.apiService.searchInscriptionsByClasse(
+        //   query,
+        // );
+        _inscriptionFuture = _inscriptionFuture.then((inscriptions) {
+          return inscriptions.where((inscription) {
+            print(inscription);
+            return inscription.classe.toLowerCase().contains(query);
+          }).toList();
+        });
       } else {
         _inscriptionFuture = widget.apiService.findAllInscriptions();
       }

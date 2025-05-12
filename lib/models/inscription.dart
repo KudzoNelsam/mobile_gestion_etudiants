@@ -1,5 +1,5 @@
 class Inscription {
-  final int id;
+  final num id;
   final String nom;
   final String prenom;
   final String classe;
@@ -17,7 +17,8 @@ class Inscription {
 
   factory Inscription.fromJson(Map<String, dynamic> json) {
     return Inscription(
-      id: json['id'],
+      // id: num.parse(json['id']),
+      id: int.parse(json['id'].toString()),
       nom: json['nom'],
       prenom: json['prenom'],
       classe: json['classe'],
